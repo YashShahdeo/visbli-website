@@ -1,0 +1,24 @@
+{
+  "name": "visbli-website",
+  "version": "1.0.0",
+  "description": "Visbli website with admin-frontend design system",
+  "main": "index.html",
+  "scripts": {
+    "build-css": "tailwindcss -i ./globals.css -o ./dist/output.css --watch",
+    "dev": "npx serve .",
+    "build": "tailwindcss -i ./globals.css -o ./dist/output.css --minify"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.0",
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.32"
+  },
+  "keywords": [
+    "visbli",
+    "website",
+    "tailwindcss",
+    "design-system"
+  ],
+  "author": "Visbli Team",
+  "license": "MIT"
+}

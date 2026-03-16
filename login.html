@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Visbli</title>
+    <link rel="stylesheet" href="dist/output.css">
+    <link rel="stylesheet" href="globals.css">
+</head>
+<body class="min-h-screen bg-background text-foreground font-sans flex flex-col">
+    <nav class="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-2">
+                    <a href="/homepage/" class="flex items-center space-x-2">
+                        <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                            <span class="text-primary-foreground font-bold text-sm">V</span>
+                        </div>
+                        <span class="font-semibold text-xl">Visbli</span>
+                    </a>
+                </div>
+
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="/homepage/" class="text-foreground hover:text-primary transition-colors">Homepage</a>
+                    <a href="/products.html" class="text-foreground hover:text-primary transition-colors">Products</a>
+                    <a href="/pricing.html" class="text-foreground hover:text-primary transition-colors">Pricing</a>
+                    <a href="/services.html" class="text-foreground hover:text-primary transition-colors">Services</a>
+                    <a href="/about.html" class="text-foreground hover:text-primary transition-colors">About</a>
+                    <a href="/contact.html" class="text-foreground hover:text-primary transition-colors">Contact</a>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <a href="/login.html" class="px-4 py-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors">Login</a>
+                    <a href="/signup.html" class="px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors">Sign Up</a>
+                    <button id="theme-toggle" class="p-2 rounded-lg hover:bg-accent transition-colors" aria-label="Toggle theme">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                        </svg>
+                    </button>
+                    <button class="md:hidden p-2 rounded-lg hover:bg-accent transition-colors" aria-label="Open menu">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-1 flex items-center justify-center px-4 py-12">
+        <div class="w-full" style="max-width: 28rem; width: 100%;">
+            <section class="bg-card border border-border rounded-2xl p-8 sm:p-10 shadow-sm">
+                    <div class="space-y-2 mb-8">
+                        <h2 class="text-2xl font-semibold">Login</h2>
+                        <p class="text-muted-foreground">Use your email and password to continue.</p>
+                    </div>
+
+                    <form class="space-y-5">
+                        <div class="space-y-2">
+                            <label for="email" class="block text-sm font-medium">Email</label>
+                            <input id="email" name="email" type="email" autocomplete="email" required class="w-full px-4 py-3 rounded-lg border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary" placeholder="you@company.com" />
+                        </div>
+
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between">
+                                <label for="password" class="block text-sm font-medium">Password</label>
+                                <a href="#" class="text-sm text-primary hover:text-primary/80 transition-colors">Forgot password?</a>
+                            </div>
+                            <input id="password" name="password" type="password" autocomplete="current-password" required class="w-full px-4 py-3 rounded-lg border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary" placeholder="••••••••" />
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <label class="inline-flex items-center gap-2 text-sm text-muted-foreground">
+                                <input type="checkbox" class="h-4 w-4 rounded border-input text-primary focus:ring-primary" />
+                                Remember me
+                            </label>
+                            <span class="text-sm text-muted-foreground">Need help? <a href="/contact.html" class="text-primary hover:text-primary/80 transition-colors">Contact support</a></span>
+                        </div>
+
+                        <button type="submit" class="w-full px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium">
+                            Continue
+                        </button>
+
+                        <div class="relative">
+                            <div class="absolute inset-0 flex items-center">
+                                <div class="w-full border-t border-border"></div>
+                            </div>
+                            <div class="relative flex justify-center text-sm">
+                                <span class="bg-card px-3 text-muted-foreground">or</span>
+                            </div>
+                        </div>
+
+                        <button type="button" class="w-full px-6 py-3 bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/80 transition-colors font-medium">
+                            Continue with Google
+                        </button>
+
+                        <p class="text-sm text-muted-foreground text-center">
+                            New to Visbli?
+                            <a href="/signup.html" class="text-primary hover:text-primary/80 transition-colors font-medium">Create an account</a>
+                        </p>
+                    </form>
+            </section>
+        </div>
+    </main>
+
+    <footer class="bg-card border-t border-border py-10 px-4">
+        <div class="container mx-auto max-w-6xl">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
+                <p>&copy; 2024 Visbli. All rights reserved.</p>
+                <div class="flex items-center gap-6">
+                    <a href="/homepage/" class="hover:text-primary transition-colors">Homepage</a>
+                    <a href="/pricing.html" class="hover:text-primary transition-colors">Pricing</a>
+                    <a href="/contact.html" class="hover:text-primary transition-colors">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
