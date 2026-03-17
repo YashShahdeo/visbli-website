@@ -2,6 +2,9 @@
 const themeToggle = document.getElementById('theme-toggle');
 const html = document.documentElement;
 
+const normalize = (s) => (s || '').replace(/\s+/g, ' ').trim();
+const isAuthed = () => localStorage.getItem('visbli_authed') === 'true';
+
 // Check for saved theme preference or default to light
 const currentTheme = localStorage.getItem('theme') || 'light';
 html.classList.toggle('dark', currentTheme === 'dark');
@@ -56,7 +59,8 @@ pricingToggle?.addEventListener('click', () => {
 
 // Login and Signup button handlers
 document.addEventListener('DOMContentLoaded', () => {
-    const normalize = (s) => (s || '').replace(/\s+/g, ' ').trim();
+    const path = (window.location.pathname || '').toLowerCase();
+    const isPricingPage = path === '/pricing' || path.endsWith('/pricing.html') || path.endsWith('/pricing/');
 
     // Delegate so it also works for dynamically created mobile menu buttons
     document.addEventListener('click', (e) => {
@@ -105,18 +109,63 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     // Pricing section buttons
+    const getPlanFromCta = (ctaButton) => {
+        const card = ctaButton.closest('.bg-card');
+        const heading = card?.querySelector('h3');
+        const plan = normalize(heading?.textContent);
+        return plan || '';
+    };
+
     const pricingButtons = document.querySelectorAll('button');
     pricingButtons.forEach(button => {
-        if (button.textContent === 'Contact Sales') {
+        const label = normalize(button.textContent);
+
+        if (label === 'Start Free Trial') {
+            button.addEventListener('click', (e) => {
+                if (!isPricingPage) return;
+                if (isAuthed()) return;
+
+                e.preventDefault();
+                const plan = getPlanFromCta(button);
+                const next = encodeURIComponent('/pricing.html');
+                const planParam = plan ? `&plan=${encodeURIComponent(plan)}` : '';
+                window.location.href = `/signup.html?redirect=${next}${planParam}`;
+            });
+        }
+
+        if (label === 'Contact Sales') {
             button.addEventListener('click', () => {
                 alert('Contact Sales - This would open a contact form or redirect to the sales page.');
             });
         }
-        if (button.textContent === 'Schedule a Demo') {
+
+        if (label === 'Schedule a Demo') {
             button.addEventListener('click', () => {
                 alert('Schedule a Demo - This would open a calendar booking modal or redirect to a scheduling page.');
             });
         }
+    });
+
+    // Basic auth simulation: set a flag on login/signup submit and optionally return to a redirect URL.
+    document.addEventListener('submit', (e) => {
+        const form = e.target;
+        if (!(form instanceof HTMLFormElement)) return;
+
+        const page = (window.location.pathname || '').toLowerCase();
+        const isAuthPage = page.endsWith('/login.html') || page.endsWith('/signup.html') || page.endsWith('/login') || page.endsWith('/signup');
+        if (!isAuthPage) return;
+
+        e.preventDefault();
+        localStorage.setItem('visbli_authed', 'true');
+
+        const params = new URLSearchParams(window.location.search);
+        const redirect = params.get('redirect');
+        if (redirect) {
+            window.location.href = redirect;
+            return;
+        }
+
+        window.location.href = '/pricing.html';
     });
 });
 

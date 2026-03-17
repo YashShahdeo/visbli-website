@@ -51,20 +51,19 @@
     </nav>
 
     <!-- Homepage Hero Section -->
-    <section id="homepage" class="min-h-screen flex items-center justify-center px-4 py-20 bg-gradient-to-br from-background via-background to-accent/5">
+    <section id="homepage" class="px-4 py-16 bg-gradient-to-br from-background via-background to-accent/5">
         <div class="container mx-auto max-w-6xl">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div class="space-y-8">
-                    <div class="inline-flex items-center px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium">
+                    <div class="inline-flex items-center px-4 py-2 bg-accent rounded-full text-accent-foreground text-sm font-medium">
                         <span class="w-2 h-2 bg-primary rounded-full mr-2 animate-pulse"></span>
                         Now Available: Visbli Platform
                     </div>
                     <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight">
-                        Transform Your Business with 
-                        <span class="bg-gradient-to-r from-primary to-accent-foreground bg-clip-text text-transparent"> Digital Innovation</span>
+                        One Workspace. Unlimited Agents. Total Control.
                     </h1>
                     <p class="text-lg md:text-xl text-muted-foreground leading-relaxed">
-                        Unlock the power of cutting-edge technology with our comprehensive suite of digital solutions. From web development to mobile apps, we bring your vision to life.
+                        Stop jumping between Jira, Notion, and manual scripts. Manage your tasks, docs, and custom-built AI agents in a single, secure multi-tenant environment designed to scale with your business.
                     </p>
                     <div class="flex flex-col sm:flex-row gap-4 w-full">
                         <button class="w-full sm:w-auto px-8 py-4 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all">
@@ -105,39 +104,124 @@
                         </div>
                     </div>
                 </div>
-                <div class="relative">
-                    <div class="absolute inset-0 bg-gradient-to-r from-primary/20 to-accent/20 rounded-2xl transform rotate-3"></div>
-                    <div class="relative bg-card border border-border rounded-2xl p-8 shadow-xl">
-                        <div class="space-y-6">
-                            <div class="flex items-center justify-between">
-                                <h3 class="text-xl font-semibold">Dashboard Preview</h3>
-                                <div class="flex space-x-2">
-                                    <div class="w-3 h-3 bg-red-500 rounded-full"></div>
-                                    <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                                    <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+
+                <div class="hidden lg:block">
+                    <div class="integration-orbit">
+                        <div class="integration-orbit__bg"></div>
+
+                        <div class="integration-orbit__hub">
+                            <div class="integration-orbit__hub-ring"></div>
+                            <div class="integration-orbit__hub-core">
+                                <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
+                                    <span class="text-primary-foreground font-bold">V</span>
                                 </div>
-                            </div>
-                            <div class="grid grid-cols-2 gap-4">
-                                <div class="bg-background p-4 rounded-lg">
-                                    <div class="text-2xl font-bold text-primary">2,543</div>
-                                    <div class="text-sm text-muted-foreground">Active Users</div>
-                                </div>
-                                <div class="bg-background p-4 rounded-lg">
-                                    <div class="text-2xl font-bold text-chart-2">98.5%</div>
-                                    <div class="text-sm text-muted-foreground">Uptime</div>
-                                </div>
-                            </div>
-                            <div class="space-y-3">
-                                <div class="flex justify-between items-center">
-                                    <span class="text-sm text-muted-foreground">Project Progress</span>
-                                    <span class="text-sm font-medium">75%</span>
-                                </div>
-                                <div class="w-full bg-secondary rounded-full h-2">
-                                    <div class="bg-primary h-2 rounded-full" style="width: 75%"></div>
+                                <div class="text-center">
+                                    <div class="text-sm font-semibold">Visbli AI Agent</div>
+                                    <div class="text-xs text-muted-foreground">Connect • Capture • Execute</div>
                                 </div>
                             </div>
                         </div>
+
+                        <div class="integration-orbit__node" style="--angle: -35deg; --delay: 0ms;">
+                            <div class="integration-orbit__line"></div>
+                            <div class="integration-orbit__badge">
+                                <img src="../assets/logos/Google_Meet_Logo.svg" alt="Google Meet" class="integration-orbit__logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                                <span class="integration-orbit__fallback" style="display:none;">Meet</span>
+                            </div>
+                        </div>
+
+                        <div class="integration-orbit__node" style="--angle: 35deg; --delay: 250ms;">
+                            <div class="integration-orbit__line"></div>
+                            <div class="integration-orbit__badge">
+                                <img src="../assets/logos/Microsoft_Teams-Logo.wine.svg" alt="Microsoft Teams" class="integration-orbit__logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                                <span class="integration-orbit__fallback" style="display:none;">Teams</span>
+                            </div>
+                        </div>
+
+                        <div class="integration-orbit__node" style="--angle: 115deg; --delay: 500ms;">
+                            <div class="integration-orbit__line"></div>
+                            <div class="integration-orbit__badge">
+                                <img src="../assets/logos/Slack_Technologies-Logo.wine.svg" alt="Slack" class="integration-orbit__logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                                <span class="integration-orbit__fallback" style="display:none;">Slack</span>
+                            </div>
+                        </div>
+
+                        <div class="integration-orbit__node" style="--angle: 195deg; --delay: 750ms;">
+                            <div class="integration-orbit__line"></div>
+                            <div class="integration-orbit__badge">
+                                <img src="../assets/logos/WhatsApp-Logo.wine.svg" alt="WhatsApp" class="integration-orbit__logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                                <span class="integration-orbit__fallback" style="display:none;">WhatsApp</span>
+                            </div>
+                        </div>
+
+                        <div class="integration-orbit__node" style="--angle: 275deg; --delay: 1000ms;">
+                            <div class="integration-orbit__line"></div>
+                            <div class="integration-orbit__badge">
+                                <img src="../assets/logos/Jira_(software)-Logo.wine.svg" alt="Jira" class="integration-orbit__logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                                <span class="integration-orbit__fallback" style="display:none;">Jira</span>
+                            </div>
+                        </div>
+
+                        <div class="integration-orbit__outputs">
+                            <div class="integration-orbit__chip" style="--chip-delay: 0s;">Meeting done</div>
+                            <div class="integration-orbit__chip" style="--chip-delay: 2s;">Transcript + Summary fetched</div>
+                            <div class="integration-orbit__chip" style="--chip-delay: 4s;">Action Items created</div>
+                            <div class="integration-orbit__chip" style="--chip-delay: 6s;">Jira issue created</div>
+                            <div class="integration-orbit__chip" style="--chip-delay: 8s;">Slack alert sent</div>
+                        </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 px-4 bg-background">
+        <div class="container mx-auto max-w-6xl">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">How It Works</h2>
+                <p class="text-lg text-muted-foreground max-w-3xl mx-auto">
+                    A three-step transformation from scattered tools to a unified, agent-powered workspace.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-card p-8 rounded-xl border border-border shadow-sm hover:shadow-lg transition-all hover:-translate-y-1">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="w-12 h-12 bg-primary rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-primary-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7 12a5 5 0 1010 0 5 5 0 00-10 0zm-2 0a7 7 0 1114 0 7 7 0 01-14 0z" />
+                            </svg>
+                        </div>
+                        <span class="text-sm font-medium text-muted-foreground">Step 1</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Connect &amp; Onboard</h3>
+                    <p class="text-muted-foreground">Securely integrate your workspace (Slack, Jira, WhatsApp) and onboard your team via your company domain.</p>
+                </div>
+
+                <div class="bg-card p-8 rounded-xl border border-border shadow-sm hover:shadow-lg transition-all hover:-translate-y-1">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="w-12 h-12 bg-accent rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-accent-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <span class="text-sm font-medium text-muted-foreground">Step 2</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Capture with Intelligence</h3>
+                    <p class="text-muted-foreground">Our AI Bot joins your meetings, transcribing and extracting “The Gold”—action items, decisions, and summaries.</p>
+                </div>
+
+                <div class="bg-card p-8 rounded-xl border border-border shadow-sm hover:shadow-lg transition-all hover:-translate-y-1">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="w-12 h-12 bg-chart-2 rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        </div>
+                        <span class="text-sm font-medium text-muted-foreground">Step 3</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Execute via Agents</h3>
+                    <p class="text-muted-foreground">Specialized agents take those action items and automatically create Jira issues, Slack alerts, or WhatsApp updates.</p>
                 </div>
             </div>
         </div>
@@ -149,7 +233,7 @@
             <div class="text-center mb-16">
                 <h2 class="text-3xl md:text-4xl font-bold mb-4">Explore Our Solutions</h2>
                 <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
-                    Discover how Visbli can help transform your business with our comprehensive suite of products and services.
+                    Everything you need to capture meeting intelligence, automate workflows, and scale secure AI agents across your organization.
                 </p>
             </div>
             
@@ -160,8 +244,8 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
                         </svg>
                     </div>
-                    <h3 class="text-xl font-semibold mb-2">Products</h3>
-                    <p class="text-muted-foreground">Explore our comprehensive suite of digital products designed for modern businesses.</p>
+                    <h3 class="text-xl font-semibold mb-2">Autonomous Meeting Bot</h3>
+                    <p class="text-muted-foreground">Auto-join meetings to capture high-fidelity transcripts, summaries, and instant action items without lifting a pen.</p>
                 </a>
                 
                 <a href="../pricing.html" class="bg-background p-8 rounded-xl border border-border shadow-sm hover:shadow-lg transition-all hover:-translate-y-1 group">
@@ -170,8 +254,8 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
                     </div>
-                    <h3 class="text-xl font-semibold mb-2">Pricing</h3>
-                    <p class="text-muted-foreground">Flexible pricing plans that scale with your business needs and budget.</p>
+                    <h3 class="text-xl font-semibold mb-2">Cross-Platform Sync</h3>
+                    <p class="text-muted-foreground">Seamlessly push AI-generated insights into your existing workflow—from Jira tickets to WhatsApp messages.</p>
                 </a>
                 
                 <a href="../services.html" class="bg-background p-8 rounded-xl border border-border shadow-sm hover:shadow-lg transition-all hover:-translate-y-1 group">
@@ -181,8 +265,8 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                         </svg>
                     </div>
-                    <h3 class="text-xl font-semibold mb-2">Services</h3>
-                    <p class="text-muted-foreground">Professional services to help you implement and optimize your digital solutions.</p>
+                    <h3 class="text-xl font-semibold mb-2">Integration-Specific Agents</h3>
+                    <p class="text-muted-foreground">Deploy specialized agents for Slack, Microsoft Teams, or Jira that "live" where you work and automate platform tasks.</p>
                 </a>
                 
                 <a href="../about.html" class="bg-background p-8 rounded-xl border border-border shadow-sm hover:shadow-lg transition-all hover:-translate-y-1 group">
@@ -191,8 +275,8 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
                     </div>
-                    <h3 class="text-xl font-semibold mb-2">About Us</h3>
-                    <p class="text-muted-foreground">Learn more about our mission, team, and the values that drive our innovation.</p>
+                    <h3 class="text-xl font-semibold mb-2">Centralized Team Hub</h3>
+                    <p class="text-muted-foreground">Onboard your entire organization with domain-level security and unified access to shared meeting intelligence.</p>
                 </a>
                 
                 <a href="../contact.html" class="bg-background p-8 rounded-xl border border-border shadow-sm hover:shadow-lg transition-all hover:-translate-y-1 group">
@@ -201,8 +285,8 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                         </svg>
                     </div>
-                    <h3 class="text-xl font-semibold mb-2">Contact</h3>
-                    <p class="text-muted-foreground">Get in touch with our team to discuss your project requirements and goals.</p>
+                    <h3 class="text-xl font-semibold mb-2">Dynamic Multi-Channeling</h3>
+                    <p class="text-muted-foreground">Create new communication channels or update existing ones automatically based on AI-detected project needs.</p>
                 </a>
                 
                 <div class="bg-background p-8 rounded-xl border border-border shadow-sm hover:shadow-lg transition-all hover:-translate-y-1 group">
@@ -211,8 +295,8 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
                         </svg>
                     </div>
-                    <h3 class="text-xl font-semibold mb-2">Documentation</h3>
-                    <p class="text-muted-foreground">Comprehensive guides and API documentation to help you get started quickly.</p>
+                    <h3 class="text-xl font-semibold mb-2">Enterprise Security &amp; RLS</h3>
+                    <p class="text-muted-foreground">Bank-grade multi-tenancy ensures your sensitive meeting data and integrations are 100% isolated and secure.</p>
                 </div>
             </div>
         </div>

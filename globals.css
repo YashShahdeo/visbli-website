@@ -120,3 +120,196 @@
     font-family: var(--font-sans);
   }
 }
+
+.integration-orbit {
+  position: relative;
+  height: 420px;
+  width: 100%;
+  max-width: 520px;
+  margin-left: auto;
+}
+
+.integration-orbit__bg {
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--primary) 10%, transparent), transparent 70%);
+  opacity: 0.9;
+}
+
+.integration-orbit__hub {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.integration-orbit__hub-ring {
+  position: absolute;
+  width: 220px;
+  height: 220px;
+  border-radius: 9999px;
+  border: 1px solid color-mix(in srgb, var(--border) 55%, transparent);
+  box-shadow: var(--shadow-lg);
+  animation: visbli-hub-pulse 2.8s ease-in-out infinite;
+}
+
+.integration-orbit__hub-core {
+  position: relative;
+  display: grid;
+  gap: 10px;
+  justify-items: center;
+  padding: 18px 16px;
+  width: 220px;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--card) 92%, transparent);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-xl);
+}
+
+.integration-orbit__node {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  transform: rotate(var(--angle)) translateX(210px);
+  transform-origin: 0 0;
+  animation: visbli-orbit-float 4.8s ease-in-out infinite;
+  animation-delay: var(--delay);
+}
+
+.integration-orbit__badge {
+  position: relative;
+  transform: rotate(calc(-1 * var(--angle)));
+  display: grid;
+  place-items: center;
+  width: 78px;
+  height: 78px;
+  border-radius: 16px;
+  padding: 10px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--card) 96%, transparent);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+}
+
+.integration-orbit__logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.integration-orbit__fallback {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--secondary);
+  color: var(--secondary-foreground);
+}
+
+.integration-orbit__line {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 210px;
+  height: 2px;
+  transform: translate(-210px, -1px);
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--primary) 70%, transparent), transparent);
+  opacity: 0.65;
+  filter: blur(0.2px);
+  animation: visbli-line-pulse 2.2s ease-in-out infinite;
+  animation-delay: var(--delay);
+}
+
+.integration-orbit__outputs {
+  position: absolute;
+  right: 12px;
+  bottom: 14px;
+  display: grid;
+  gap: 8px;
+}
+
+.integration-orbit__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 9999px;
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--card) 96%, transparent);
+  box-shadow: var(--shadow-sm);
+  font-size: 12px;
+  color: var(--muted-foreground);
+  opacity: 0;
+  transform: translateY(6px);
+  animation: visbli-chip-pop 10s ease-in-out infinite;
+  animation-delay: var(--chip-delay);
+}
+
+@keyframes visbli-orbit-float {
+  0%, 100% {
+    transform: rotate(var(--angle)) translateX(210px) translateY(0);
+  }
+  50% {
+    transform: rotate(var(--angle)) translateX(210px) translateY(-10px);
+  }
+}
+
+@keyframes visbli-line-pulse {
+  0%, 100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+@keyframes visbli-hub-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: var(--shadow-lg);
+  }
+  50% {
+    transform: scale(1.03);
+    box-shadow: var(--shadow-2xl);
+  }
+}
+
+@keyframes visbli-chip-pop {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  15% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  85% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .integration-orbit__hub-ring,
+  .integration-orbit__node,
+  .integration-orbit__line,
+  .integration-orbit__chip {
+    animation: none !important;
+  }
+
+  .integration-orbit__chip {
+    opacity: 1;
+    transform: none;
+  }
+}
