@@ -90,7 +90,7 @@
                                 <span class="text-4xl font-bold text-foreground">Free</span>
                             </div>
                         </div>
-                        <button class="w-full px-6 py-3 bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/80 transition-colors font-medium">
+                        <button onclick="window.location.href='/signup.html'" class="w-full px-6 py-3 bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/80 transition-colors font-medium">
                             Get Started
                         </button>
                         <ul class="space-y-3">
@@ -137,13 +137,13 @@
                         </div>
                         <div class="space-y-2">
                             <div class="flex items-baseline">
-                                <span class="text-4xl font-bold text-foreground monthly-price">$29</span>
-                                <span class="text-4xl font-bold text-foreground annual-price hidden">$23</span>
+                                <span class="text-4xl font-bold text-foreground individual-price monthly-price">₹10</span>
+                                <span class="text-4xl font-bold text-foreground individual-price annual-price hidden">₹8</span>
                                 <span class="text-muted-foreground ml-2">/month</span>
                             </div>
                             <p class="text-sm text-muted-foreground annual-price hidden">Billed annually</p>
                         </div>
-                        <button class="w-full px-6 py-3 bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/80 transition-colors font-medium">
+                        <button type="button" data-plan="Individual" class="payment-btn w-full px-6 py-3 bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/80 transition-colors font-medium">
                             Start Free Trial
                         </button>
                         <ul class="space-y-3">
@@ -195,13 +195,25 @@
                         </div>
                         <div class="space-y-2">
                             <div class="flex items-baseline">
-                                <span class="text-4xl font-bold monthly-price">$99</span>
-                                <span class="text-4xl font-bold annual-price hidden">$79</span>
-                                <span class="text-primary-foreground/80 ml-2">/month</span>
+                                <span class="text-4xl font-bold professional-price monthly-price">₹1</span>
+                                <span class="text-primary-foreground/80 ml-2">/user/month</span>
                             </div>
-                            <p class="text-sm text-primary-foreground/80 annual-price hidden">Billed annually</p>
+                            <div class="mt-4">
+                                <label for="user-count" class="block text-sm font-medium mb-2">Number of users</label>
+                                <input 
+                                    type="number" 
+                                    id="user-count" 
+                                    min="1" 
+                                    max="1000" 
+                                    value="10" 
+                                    class="w-full px-4 py-2 rounded-lg border border-primary-foreground/20 bg-primary-foreground/10 text-primary-foreground focus:outline-none focus:ring-2 focus:ring-background"
+                                />
+                            </div>
+                            <div class="mt-2 text-sm text-primary-foreground/80">
+                                Total: <span id="total-price" class="font-bold text-lg">₹10</span>/month
+                            </div>
                         </div>
-                        <button class="w-full px-6 py-3 bg-background text-foreground rounded-lg hover:bg-background/90 transition-colors font-medium">
+                        <button type="button" data-plan="Professional" class="payment-btn w-full px-6 py-3 bg-background text-foreground rounded-lg hover:bg-background/90 transition-colors font-medium">
                             Start Free Trial
                         </button>
                         <ul class="space-y-3">
@@ -258,7 +270,7 @@
                             </div>
                             <p class="text-sm text-muted-foreground">Contact us for pricing</p>
                         </div>
-                        <button class="w-full px-6 py-3 bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/80 transition-colors font-medium">
+                        <button onclick="window.location.href='/contact.html'" class="w-full px-6 py-3 bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/80 transition-colors font-medium">
                             Contact Sales
                         </button>
                         <ul class="space-y-3">
@@ -385,6 +397,203 @@
         </div>
     </footer>
 
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="api-client.js"></script>
+    <script>
+        // Load plans from backend
+        let plans = [];
+        
+        async function loadPlans() {
+            try {
+                const response = await ApiClient.getPlans();
+                console.log('Plans API response:', response);
+                
+                if (response.success) {
+                    // API returns { success: true, data: { plans: [...] } }
+                    plans = response.data.plans || response.data;
+                    console.log('Loaded plans:', plans);
+                    updatePricing();
+                } else {
+                    console.error('Failed to load plans:', response.message);
+                }
+            } catch (error) {
+                console.error('Failed to load plans:', error);
+            }
+        }
+
+        function updatePricing() {
+            // Update Individual plan price
+            const individualPlan = plans.find(p => p.name === 'Individual');
+            if (individualPlan) {
+                document.querySelectorAll('.individual-price').forEach(el => {
+                    el.textContent = `₹${individualPlan.price}`;
+                });
+            }
+
+            // Update Professional plan price
+            const professionalPlan = plans.find(p => p.name === 'Professional');
+            if (professionalPlan) {
+                document.querySelectorAll('.professional-price').forEach(el => {
+                    el.textContent = `₹${professionalPlan.price}`;
+                });
+            }
+        }
+
+        // Make handlePayment globally accessible
+        window.handlePayment = async function(planName, userCount = 1) {
+            console.log('handlePayment called with plan:', planName, 'userCount:', userCount);
+            
+            // Check if user is logged in
+            if (!TokenManager.isAuthenticated()) {
+                alert('Please login first to subscribe to a plan');
+                window.location.href = '/login.html?redirect=' + encodeURIComponent(window.location.pathname);
+                return;
+            }
+
+            const user = TokenManager.getUser();
+            const tenant = TokenManager.getTenant();
+
+            console.log('User:', user);
+            console.log('Tenant:', tenant);
+
+            if (!tenant) {
+                alert('No tenant found. Please contact support.');
+                return;
+            }
+
+            // Find the plan
+            const plan = plans.find(p => p.name === planName);
+            console.log('Selected plan:', plan);
+            
+            if (!plan) {
+                alert('Plan not found. Please refresh the page and try again.');
+                return;
+            }
+
+            // Free plans don't need payment
+            if (parseFloat(plan.price) === 0) {
+                alert('This is a free plan. No payment required!');
+                return;
+            }
+
+            // Calculate total amount based on user count
+            const pricePerUser = parseFloat(plan.price);
+            const totalAmount = pricePerUser * userCount;
+
+            console.log('Price per user:', pricePerUser, 'Total amount:', totalAmount);
+
+            try {
+                console.log('Creating order for plan:', plan.id, 'tenant:', tenant.id, 'userCount:', userCount);
+                
+                // Create order with user count
+                const orderResponse = await ApiClient.createOrder(plan.id, tenant.id, userCount);
+                
+                console.log('Order response:', orderResponse);
+                
+                if (!orderResponse.success) {
+                    throw new Error(orderResponse.message || 'Failed to create order');
+                }
+
+                const { order, razorpayKeyId } = orderResponse.data;
+
+                console.log('Opening Razorpay checkout with order:', order);
+
+                // Razorpay checkout options
+                const options = {
+                    key: razorpayKeyId,
+                    amount: order.amount,
+                    currency: order.currency,
+                    name: 'Visbli',
+                    description: `${plan.name} Plan - ${userCount} user(s)`,
+                    order_id: order.id,
+                    prefill: {
+                        name: user.fullName || user.full_name,
+                        email: user.email,
+                    },
+                    theme: {
+                        color: '#6366f1'
+                    },
+                    handler: async function (response) {
+                        console.log('Payment success response:', response);
+                        
+                        try {
+                            // Verify payment
+                            const verifyResponse = await ApiClient.verifyPayment({
+                                razorpay_order_id: response.razorpay_order_id,
+                                razorpay_payment_id: response.razorpay_payment_id,
+                                razorpay_signature: response.razorpay_signature,
+                                tenantId: tenant.id,
+                                planId: plan.id,
+                                userCount: userCount,
+                            });
+
+                            console.log('Verify response:', verifyResponse);
+
+                            if (verifyResponse.success) {
+                                alert('Payment successful! Your subscription is now active.');
+                                // Redirect to dashboard or homepage
+                                window.location.href = '/homepage/';
+                            } else {
+                                throw new Error(verifyResponse.message || 'Payment verification failed');
+                            }
+                        } catch (error) {
+                            console.error('Payment verification error:', error);
+                            alert('Payment verification failed: ' + error.message);
+                        }
+                    },
+                    modal: {
+                        ondismiss: function() {
+                            console.log('Payment cancelled by user');
+                        }
+                    }
+                };
+
+                const razorpay = new Razorpay(options);
+                razorpay.open();
+
+            } catch (error) {
+                console.error('Payment error:', error);
+                alert('Failed to initiate payment: ' + error.message);
+            }
+        };
+
+        // Load plans on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Pricing page loaded, loading plans...');
+            loadPlans();
+            
+            // User count input handler for Professional plan
+            const userCountInput = document.getElementById('user-count');
+            const totalPriceEl = document.getElementById('total-price');
+            
+            if (userCountInput && totalPriceEl) {
+                userCountInput.addEventListener('input', function() {
+                    const userCount = parseInt(this.value) || 1;
+                    const pricePerUser = 1;
+                    const total = userCount * pricePerUser;
+                    totalPriceEl.textContent = `₹${total}`;
+                });
+            }
+            
+            // Add click handlers to payment buttons
+            document.querySelectorAll('.payment-btn').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const planName = this.getAttribute('data-plan');
+                    console.log('Payment button clicked for plan:', planName);
+                    
+                    // For Professional plan, get user count
+                    let userCount = 1;
+                    if (planName === 'Professional') {
+                        userCount = parseInt(document.getElementById('user-count').value) || 1;
+                    }
+                    
+                    window.handlePayment(planName, userCount);
+                });
+            });
+        });
+    </script>
     <script src="script.js"></script>
 </body>
 </html>

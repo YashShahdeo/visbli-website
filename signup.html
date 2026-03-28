@@ -55,7 +55,7 @@
                         <p class="text-muted-foreground">Create an account in under a minute.</p>
                     </div>
 
-                    <form class="space-y-4">
+                    <form id="signup-form" class="space-y-4">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div class="space-y-2">
                                 <label for="firstName" class="block text-sm font-medium">First name</label>
@@ -75,7 +75,7 @@
                         <div class="space-y-2">
                             <label for="password" class="block text-sm font-medium">Password</label>
                             <input id="password" name="password" type="password" autocomplete="new-password" required class="w-full px-4 py-3 rounded-lg border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Create a strong password" />
-                            <p class="text-xs text-muted-foreground">Use at least 8 characters with a mix of letters and numbers.</p>
+                            <p class="text-xs text-muted-foreground">Must be at least 8 characters with uppercase, lowercase, and a number.</p>
                         </div>
 
                         <div class="flex items-start gap-3">
@@ -122,6 +122,64 @@
         </div>
     </footer>
 
+    <script src="api-client.js"></script>
+    <script>
+        // Signup form handler
+        const signupForm = document.getElementById('signup-form');
+        
+        signupForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            e.stopPropagation(); // Stop event from bubbling to script.js handler
+            
+            console.log('Signup form submitted');
+            
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const terms = document.getElementById('terms').checked;
+            const submitButton = signupForm.querySelector('button[type="submit"]');
+            
+            if (!terms) {
+                alert('Please accept the terms and privacy policy');
+                return;
+            }
+            
+            // Disable button and show loading
+            submitButton.disabled = true;
+            submitButton.textContent = 'Creating account...';
+            
+            try {
+                const fullName = `${firstName} ${lastName}`.trim();
+                console.log('Calling API signup with:', { email, fullName });
+                
+                const response = await ApiClient.signup(email, password, fullName, null);
+                
+                console.log('Signup response:', response);
+                
+                if (response.success) {
+                    // Show success message
+                    alert('Account created successfully! Redirecting...');
+                    
+                    // Redirect to homepage
+                    window.location.href = '/homepage/';
+                } else {
+                    throw new Error(response.message || 'Signup failed');
+                }
+            } catch (error) {
+                console.error('Signup error:', error);
+                alert('Signup failed: ' + error.message);
+                submitButton.disabled = false;
+                submitButton.textContent = 'Create account';
+            }
+        });
+
+        // Check if already logged in
+        if (TokenManager.isAuthenticated()) {
+            console.log('Already authenticated, redirecting...');
+            window.location.href = '/homepage/';
+        }
+    </script>
     <script src="script.js"></script>
 </body>
 </html>

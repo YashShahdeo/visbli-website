@@ -92,15 +92,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     
-    // Start Free Trial and Watch Demo buttons
-    const trialBtn = Array.from(document.querySelectorAll('button')).find(btn => normalize(btn.textContent) === 'Start Free Trial');
+    // Start Free Trial and Watch Demo buttons - REMOVED, handled in pricing.html
     const demoBtn = Array.from(document.querySelectorAll('button')).find(btn => normalize(btn.textContent) === 'Watch Demo');
-    
-    if (trialBtn) {
-        trialBtn.addEventListener('click', () => {
-            window.location.href = '/pricing.html';
-        });
-    }
     
     if (demoBtn) {
         demoBtn.addEventListener('click', () => {
@@ -108,29 +101,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    // Pricing section buttons
-    const getPlanFromCta = (ctaButton) => {
-        const card = ctaButton.closest('.bg-card');
-        const heading = card?.querySelector('h3');
-        const plan = normalize(heading?.textContent);
-        return plan || '';
-    };
-
+    // Pricing section buttons - handled in pricing.html with payment integration
     const pricingButtons = document.querySelectorAll('button');
     pricingButtons.forEach(button => {
         const label = normalize(button.textContent);
 
+        // Skip "Start Free Trial" buttons - they're handled in pricing.html
         if (label === 'Start Free Trial') {
-            button.addEventListener('click', (e) => {
-                if (!isPricingPage) return;
-                if (isAuthed()) return;
-
-                e.preventDefault();
-                const plan = getPlanFromCta(button);
-                const next = encodeURIComponent('/pricing.html');
-                const planParam = plan ? `&plan=${encodeURIComponent(plan)}` : '';
-                window.location.href = `/signup.html?redirect=${next}${planParam}`;
-            });
+            return;
         }
 
         if (label === 'Contact Sales') {
@@ -147,9 +125,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Basic auth simulation: set a flag on login/signup submit and optionally return to a redirect URL.
+    // SKIP forms with specific IDs (signup-form, login-form) as they have their own handlers
     document.addEventListener('submit', (e) => {
         const form = e.target;
         if (!(form instanceof HTMLFormElement)) return;
+
+        // Skip forms with specific IDs - they have their own handlers
+        if (form.id === 'signup-form' || form.id === 'login-form') {
+            return;
+        }
 
         const page = (window.location.pathname || '').toLowerCase();
         const isAuthPage = page.endsWith('/login.html') || page.endsWith('/signup.html') || page.endsWith('/login') || page.endsWith('/signup');
@@ -249,8 +233,8 @@ mobileMenuButton?.addEventListener('click', () => {
     mobileMenu.style.display = mobileMenuOpen ? 'block' : 'none';
 });
 
-// Form submission
-const contactForm = document.querySelector('form');
+// Form submission - only for contact forms, not auth forms
+const contactForm = document.querySelector('form:not(#signup-form):not(#login-form)');
 contactForm?.addEventListener('submit', (e) => {
     e.preventDefault();
     
