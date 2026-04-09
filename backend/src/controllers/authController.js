@@ -83,8 +83,27 @@ const signup = async (req, res) => {
       return { user, tenant, verificationToken };
     });
 
-    // Generate tokens
-    const accessToken = generateAccessToken({ userId: result.user.id });
+    // Generate set password token
+    const setPasswordToken = generateSetPasswordToken(
+      result.user.id,
+      result.user.email,
+      result.tenant.id
+    );
+
+    // Send set password email
+    const { sendSetPasswordEmail } = require('../services/emailService');
+    await sendSetPasswordEmail(
+      result.user.email,
+      result.user.fullName,
+      setPasswordToken
+    );
+
+    // Generate tokens for immediate login (optional - user can also set password first)
+    const accessToken = generateAccessToken({ 
+      userId: result.user.id,
+      tenantId: result.tenant.id,
+      email: result.user.email
+    });
     const refreshToken = generateRefreshToken({ userId: result.user.id });
 
     // Store refresh token in session
@@ -177,7 +196,11 @@ const login = async (req, res) => {
     }
 
     // Generate tokens
-    const accessToken = generateAccessToken({ userId: user.id });
+    const accessToken = generateAccessToken({ 
+      userId: user.id,
+      tenantId: user.tenantMemberships[0]?.tenant.id,
+      email: user.email
+    });
     const refreshToken = generateRefreshToken({ userId: user.id });
 
     // Store refresh token in session
@@ -327,9 +350,184 @@ const getProfile = async (req, res) => {
   }
 };
 
+/**
+ * Set password (for new users from email link)
+ */
+const setPassword = async (req, res) => {
+  try {
+    const { token, password } = req.body;
+
+    if (!token || !password) {
+      return res.status(400).json({
+        success: false,
+        message: 'Token and password are required',
+      });
+    }
+
+    // Verify token
+    const { verifyAccessToken } = require('../utils/jwt');
+    let decoded;
+    try {
+      decoded = verifyAccessToken(token);
+    } catch (error) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid or expired token',
+      });
+    }
+
+    const { userId, email, tenantId } = decoded;
+
+    // Check if token was already used (check if user already has password)
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      include: {
+        tenantMemberships: {
+          where: { status: 'active' },
+          include: {
+            tenant: true,
+          },
+        },
+      },
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      });
+    }
+
+    // Hash new password
+    const passwordHash = await bcrypt.hash(password, 12);
+
+    // Update user password and mark email as verified
+    await prisma.user.update({
+      where: { id: userId },
+      data: {
+        passwordHash,
+        isEmailVerified: true,
+      },
+    });
+
+    // Generate new tokens for login
+    const accessToken = generateAccessToken({ 
+      userId: user.id,
+      tenantId: tenantId || user.tenantMemberships[0]?.tenant.id,
+      email: user.email
+    });
+    const refreshToken = generateRefreshToken({ userId: user.id });
+
+    // Store refresh token in session
+    const refreshTokenHash = crypto.createHash('sha256').update(refreshToken).digest('hex');
+    await prisma.session.create({
+      data: {
+        userId: user.id,
+        refreshTokenHash,
+        ipAddress: req.ip,
+        userAgent: req.get('user-agent'),
+        expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
+      },
+    });
+
+    // Log audit
+    await prisma.auditLog.create({
+      data: {
+        userId: user.id,
+        tenantId: tenantId || user.tenantMemberships[0]?.tenant.id,
+        action: 'password_set',
+        resourceType: 'user',
+        resourceId: user.id,
+        ipAddress: req.ip,
+        userAgent: req.get('user-agent'),
+      },
+    });
+
+    res.json({
+      success: true,
+      message: 'Password set successfully',
+      data: {
+        user: {
+          id: user.id,
+          email: user.email,
+          fullName: user.fullName,
+          isEmailVerified: true,
+        },
+        tenants: user.tenantMemberships.map(m => ({
+          id: m.tenant.id,
+          name: m.tenant.name,
+          role: m.role,
+          isPersonal: m.tenant.isPersonal,
+        })),
+        tokens: {
+          accessToken,
+          refreshToken,
+        },
+      },
+    });
+  } catch (error) {
+    console.error('Set password error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error setting password',
+    });
+  }
+};
+
+/**
+ * Verify token
+ */
+const verifyToken = async (req, res) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: req.user.id },
+      select: {
+        id: true,
+        email: true,
+        fullName: true,
+        isEmailVerified: true,
+        status: true,
+      },
+    });
+
+    if (!user || user.status !== 'active') {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid user',
+      });
+    }
+
+    res.json({
+      success: true,
+      data: { user },
+    });
+  } catch (error) {
+    console.error('Verify token error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error verifying token',
+    });
+  }
+};
+
+/**
+ * Generate set password token
+ */
+const generateSetPasswordToken = (userId, email, tenantId) => {
+  return generateAccessToken({ 
+    userId, 
+    email, 
+    tenantId,
+    type: 'set_password'
+  });
+};
+
 module.exports = {
   signup,
   login,
   logout,
   getProfile,
+  setPassword,
+  verifyToken,
+  generateSetPasswordToken,
 };

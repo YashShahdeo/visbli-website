@@ -188,7 +188,96 @@ const sendWelcomeEmail = async (userEmail, userName) => {
   }
 };
 
+/**
+ * Send set password email (for new users)
+ */
+const sendSetPasswordEmail = async (userEmail, userName, token) => {
+  try {
+    const transporter = createTransporter();
+    const setPasswordUrl = `${process.env.MAIN_APP_URL}/set-password?token=${token}`;
+
+    const mailOptions = {
+      from: `"Visbli" <${process.env.EMAIL_FROM}>`,
+      to: userEmail,
+      subject: 'Set Your Password - Visbli',
+      html: `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <style>
+            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background: #6366f1; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
+            .content { background: #f9fafb; padding: 30px; border-radius: 0 0 8px 8px; }
+            .footer { text-align: center; margin-top: 30px; color: #6b7280; font-size: 14px; }
+            .button { display: inline-block; background: #6366f1; color: white !important; padding: 14px 32px; text-decoration: none; border-radius: 6px; margin: 20px 0; font-weight: 600; }
+            .warning { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 12px; margin: 20px 0; border-radius: 4px; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1>Welcome to Visbli! 🎉</h1>
+            </div>
+            <div class="content">
+              <p>Hi ${userName || 'there'},</p>
+              <p>Thank you for signing up for Visbli! To complete your account setup, please set your password by clicking the button below:</p>
+              
+              <center>
+                <a href="${setPasswordUrl}" class="button">Set Your Password</a>
+              </center>
+
+              <p style="margin-top: 20px; font-size: 14px; color: #6b7280;">
+                Or copy and paste this link into your browser:<br>
+                <a href="${setPasswordUrl}" style="color: #6366f1; word-break: break-all;">${setPasswordUrl}</a>
+              </p>
+
+              <div class="warning">
+                <strong>⏰ Important:</strong> This link will expire in 24 hours for security reasons.
+              </div>
+
+              <p>Once you've set your password, you'll have full access to your Visbli dashboard and all features included in your plan.</p>
+
+              <p style="margin-top: 30px; font-size: 14px; color: #6b7280;">
+                If you didn't sign up for Visbli, please ignore this email or contact our support team.
+              </p>
+            </div>
+            <div class="footer">
+              <p>© ${new Date().getFullYear()} Visbli. All rights reserved.</p>
+              <p>This is an automated email. Please do not reply to this message.</p>
+            </div>
+          </div>
+        </body>
+        </html>
+      `,
+      text: `
+Hi ${userName || 'there'},
+
+Thank you for signing up for Visbli! To complete your account setup, please set your password by visiting this link:
+
+${setPasswordUrl}
+
+This link will expire in 24 hours for security reasons.
+
+Once you've set your password, you'll have full access to your Visbli dashboard and all features included in your plan.
+
+If you didn't sign up for Visbli, please ignore this email or contact our support team.
+
+© ${new Date().getFullYear()} Visbli. All rights reserved.
+      `,
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+    console.log('Set password email sent:', info.messageId);
+    return { success: true, messageId: info.messageId };
+  } catch (error) {
+    console.error('Error sending set password email:', error);
+    return { success: false, error: error.message };
+  }
+};
+
 module.exports = {
   sendPaymentConfirmation,
   sendWelcomeEmail,
+  sendSetPasswordEmail,
 };

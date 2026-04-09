@@ -11,9 +11,11 @@ const {
 // Public routes
 router.post('/signup', signupValidation, validate, authController.signup);
 router.post('/login', loginValidation, validate, authController.login);
+router.post('/set-password', authController.setPassword);
 
 // Protected routes
 router.post('/logout', authenticate, authController.logout);
 router.get('/profile', authenticate, authController.getProfile);
+router.get('/verify', authenticate, authController.verifyToken);
 
 module.exports = router;
