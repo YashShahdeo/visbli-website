@@ -2,7 +2,7 @@
 // Automatically detects environment and uses correct API URL
 const API_BASE_URL = window.location.hostname === 'localhost' 
   ? 'http://localhost:5000/api'
-  : 'https://your-backend-url.railway.app/api'; // UPDATE THIS after deploying backend
+  : 'https://visbli-website.onrender.com/api';
 
 // Token management
 const TokenManager = {
